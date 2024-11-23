@@ -1,32 +1,45 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Switch } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Switch,
+  Modal,
+  FlatList,
+  StyleSheet,
+} from "react-native";
 import { lightStyles, darkStyles } from "./styles";
+import Icon from "react-native-vector-icons/FontAwesome"; // Import FontAwesome icons
 
 export default function Calculator() {
   const [input, setInput] = useState("");
   const [result, setResult] = useState("");
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [history, setHistory] = useState([]); // Store calculation history
+  const [isHistoryVisible, setIsHistoryVisible] = useState(false); // Modal visibility
 
   const styles = isDarkTheme ? darkStyles : lightStyles;
 
   const handlePress = (value) => {
     if (value === "=") {
       try {
-        // Replace division and multiplication symbols with proper operators
         let updatedInput = input.replace(/÷/g, "/").replace(/×/g, "*");
-
-        // Evaluate the expression
         const evaluatedResult = eval(updatedInput);
 
-        // Handle specific edge cases for division by zero
+        // Handle division by zero cases
         if (updatedInput.includes("/0")) {
           if (updatedInput.includes("0/0")) {
-            setResult("Result is undefined"); // Case: 0/0
+            setResult("Result is undefined"); // 0/0
           } else {
-            setResult("Cannot divide by zero"); // Case: Any number/0
+            setResult("Cannot divide by zero"); // n/0
           }
         } else {
           setResult(evaluatedResult);
+          // Add to history
+          setHistory((prev) => [
+            ...prev,
+            { id: Date.now().toString(), input, result: evaluatedResult },
+          ]);
         }
       } catch {
         setResult("Error");
@@ -53,6 +66,12 @@ export default function Calculator() {
     }
   };
 
+  const renderHistoryItem = ({ item }) => (
+    <View style={styles.historyItem}>
+      <Text style={styles.historyText}>{item.input} = {item.result}</Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       {/* Theme Switch */}
@@ -68,13 +87,18 @@ export default function Calculator() {
 
       {/* Display Section */}
       <View style={styles.resultContainer}>
+        <TouchableOpacity
+          style={styles.historyButton}
+          onPress={() => setIsHistoryVisible(true)}
+        >
+          <Icon name="history" size={28} style={styles.historyButtonIcon} />
+        </TouchableOpacity>
         <Text style={styles.resultText}>{input || "0"}</Text>
         <Text style={styles.resultSubText}>{result}</Text>
       </View>
 
       {/* Buttons Section */}
       <View style={styles.buttonsContainer}>
-        {/* Functional Buttons */}
         <View style={styles.row}>
           {["C", "√", "⌫", "÷"].map((value) => (
             <TouchableOpacity
@@ -86,8 +110,6 @@ export default function Calculator() {
             </TouchableOpacity>
           ))}
         </View>
-
-        {/* Numbers and Operators */}
         {[
           ["7", "8", "9", "×"],
           ["4", "5", "6", "-"],
@@ -99,7 +121,9 @@ export default function Calculator() {
                 key={value}
                 style={[
                   styles.button,
-                  value.match(/[÷×+\-]/) ? styles.operatorButton : styles.numberButton,
+                  value.match(/[÷×+\-]/)
+                    ? styles.operatorButton
+                    : styles.numberButton,
                 ]}
                 onPress={() => handlePress(value)}
               >
@@ -108,8 +132,6 @@ export default function Calculator() {
             ))}
           </View>
         ))}
-
-        {/* Dot, Zero, Percentage, Equals */}
         <View style={styles.row}>
           <TouchableOpacity
             style={[styles.button, styles.numberButton]}
@@ -137,6 +159,24 @@ export default function Calculator() {
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* History Modal */}
+      <Modal visible={isHistoryVisible} animationType="slide">
+        <View style={styles.historyModal}>
+          <Text style={styles.historyTitle}>Calculation History</Text>
+          <FlatList
+            data={history}
+            renderItem={renderHistoryItem}
+            keyExtractor={(item) => item.id}
+          />
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setIsHistoryVisible(false)}
+          >
+            <Text style={styles.closeButtonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 }

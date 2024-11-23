@@ -23,6 +23,15 @@ export const lightStyles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#f5f5f5",
   },
+  historyButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  },
+  historyButtonText: {
+    fontSize: 28,
+    color: "#000",
+  },
   resultText: {
     fontSize: 36,
     fontWeight: "bold",
@@ -62,6 +71,35 @@ export const lightStyles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
+  historyModal: {
+    flex: 1,
+    backgroundColor: "#fff",
+    padding: 20,
+  },
+  historyTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  historyItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  historyText: {
+    fontSize: 18,
+  },
+  closeButton: {
+    marginTop: 20,
+    alignSelf: "center",
+    padding: 10,
+    backgroundColor: "#f0f0f0",
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    fontSize: 18,
+    color: "#333",
+  },
 });
 
 export const darkStyles = StyleSheet.create({
@@ -87,6 +125,15 @@ export const darkStyles = StyleSheet.create({
     alignItems: "flex-end",
     padding: 20,
     backgroundColor: "#333333",
+  },
+  historyButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  },
+  historyButtonText: {
+    fontSize: 28,
+    color: "#fff", // Updated to a light color
   },
   resultText: {
     fontSize: 36,
@@ -127,6 +174,37 @@ export const darkStyles = StyleSheet.create({
   buttonText: {
     fontSize: 28,
     fontWeight: "bold",
+    color: "#fff",
+  },
+  historyModal: {
+    flex: 1,
+    backgroundColor: "#333",
+    padding: 20,
+  },
+  historyTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 20,
+  },
+  historyItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#555",
+  },
+  historyText: {
+    fontSize: 18,
+    color: "#fff",
+  },
+  closeButton: {
+    marginTop: 20,
+    alignSelf: "center",
+    padding: 10,
+    backgroundColor: "#444",
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    fontSize: 18,
     color: "#fff",
   },
 });
