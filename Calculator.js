@@ -1,16 +1,21 @@
+// @author Kavinu Senanayake
+// @ID IM/2021/114
+// @date 2024 November 22nd
+
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  Switch,
-  Modal,
-  FlatList,
-  StyleSheet,
-} from "react-native";
-import { lightStyles, darkStyles } from "./styles";
+  View, //to create a container
+  Text, //to display text
+  TouchableOpacity, //to handle button press
+  Switch, //to handle theme switch
+  Modal, //to display history
+  FlatList, //to display history items
+  StyleSheet, //to create styles
+} from "react-native"; 
+import { lightStyles, darkStyles } from "./styles"; // Import light and dark themes
 import Icon from "react-native-vector-icons/FontAwesome"; // Import FontAwesome icons
 
+// Calculator component
 export default function Calculator() {
   const [input, setInput] = useState("");
   const [result, setResult] = useState("");
@@ -18,13 +23,14 @@ export default function Calculator() {
   const [history, setHistory] = useState([]); // Store calculation history
   const [isHistoryVisible, setIsHistoryVisible] = useState(false); // Modal visibility
 
-  const styles = isDarkTheme ? darkStyles : lightStyles;
+  const styles = isDarkTheme ? darkStyles : lightStyles; // Apply theme
 
+  // Handle button press
   const handlePress = (value) => {
-    if (value === "=") {
+    if (value === "=") { // Evaluate expression
       try {
         let updatedInput = input.replace(/÷/g, "/").replace(/×/g, "*");
-        const evaluatedResult = eval(updatedInput);
+        const evaluatedResult = eval(updatedInput); // Evaluate expression using eval()
 
         // Handle division by zero cases
         if (updatedInput.includes("/0")) {
@@ -44,34 +50,36 @@ export default function Calculator() {
       } catch {
         setResult("Error");
       }
-    } else if (value === "C") {
+    } else if (value === "C") { // Clear input
       setInput("");
       setResult("");
-    } else if (value === "⌫") {
+    } else if (value === "⌫") { // Backspace
       setInput((prev) => prev.slice(0, -1));
     } else if (value === "√") {
       try {
-        setResult(Math.sqrt(eval(input || "0")));
+        setResult(Math.sqrt(eval(input || "0"))); // Square root
       } catch {
         setResult("Error");
       }
-    } else if (value === "%") {
+    } else if (value === "%") { // Percentage
       try {
-        setResult(eval(input || "0") / 100);
+        setResult(eval(input || "0") / 100); // Convert to percentage
       } catch {
-        setResult("Error");
+        setResult("Error"); // Handle invalid input
       }
     } else {
-      setInput(input + value);
+      setInput(input + value); // Append input
     }
   };
 
+  // Render history item in FlatList
   const renderHistoryItem = ({ item }) => (
     <View style={styles.historyItem}>
       <Text style={styles.historyText}>{item.input} = {item.result}</Text>
     </View>
   );
 
+  // Render history modal
   return (
     <View style={styles.container}>
       {/* Theme Switch */}
@@ -111,9 +119,9 @@ export default function Calculator() {
           ))}
         </View>
         {[
-          ["7", "8", "9", "×"],
-          ["4", "5", "6", "-"],
-          ["1", "2", "3", "+"],
+          ["7", "8", "9", "×"], // Row 1
+          ["4", "5", "6", "-"], // Row 2
+          ["1", "2", "3", "+"], // Row 3
         ].map((row, index) => (
           <View key={index} style={styles.row}>
             {row.map((value) => (
@@ -135,25 +143,25 @@ export default function Calculator() {
         <View style={styles.row}>
           <TouchableOpacity
             style={[styles.button, styles.numberButton]}
-            onPress={() => handlePress(".")}
+            onPress={() => handlePress(".")} // Decimal point
           >
             <Text style={styles.buttonText}>.</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.numberButton]}
-            onPress={() => handlePress("0")}
+            onPress={() => handlePress("0")} // Zero
           >
             <Text style={styles.buttonText}>0</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.operatorButton]}
-            onPress={() => handlePress("%")}
+            onPress={() => handlePress("%")} // Percentage
           >
             <Text style={styles.buttonText}>%</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.operatorButton]}
-            onPress={() => handlePress("=")}
+            onPress={() => handlePress("=")} // Equals
           >
             <Text style={styles.buttonText}>=</Text>
           </TouchableOpacity>
